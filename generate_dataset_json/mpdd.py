@@ -43,6 +43,11 @@ class MpddSolver(object):
             f.write(json.dumps(info, indent=4) + "\n")
         print('normal_samples', normal_samples, 'anomaly_samples', anomaly_samples)
 
+import argparse
+
 if __name__ == '__main__':
-    runner = MpddSolver(root='/remote-home/iot_zhouqihang/data/mpdd')
+    parser = argparse.ArgumentParser(description='Generate meta.json for MPDD dataset')
+    parser.add_argument('--root', type=str, default='/remote-home/iot_zhouqihang/data/mpdd', help='Root directory of the dataset')
+    args = parser.parse_args()
+    runner = MpddSolver(root=args.root)
     runner.run()

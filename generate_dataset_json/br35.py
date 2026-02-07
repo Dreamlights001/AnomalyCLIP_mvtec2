@@ -33,6 +33,11 @@ class Br35Solver(object):
         with open(self.meta_path, 'w') as f:
             f.write(json.dumps(info, indent=4) + "\n")
 
+import argparse
+
 if __name__ == '__main__':
-    runner = Br35Solver(root='/remote-home/iot_zhouqihang/data/br35')
+    parser = argparse.ArgumentParser(description='Generate meta.json for Br35H dataset')
+    parser.add_argument('--root', type=str, default='/remote-home/iot_zhouqihang/data/br35', help='Root directory of the dataset')
+    args = parser.parse_args()
+    runner = Br35Solver(root=args.root)
     runner.run()

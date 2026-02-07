@@ -45,6 +45,11 @@ class ClinicDBSolver(object):
         print('normal_samples', normal_samples, 'anomaly_samples', anomaly_samples)
 
 
+import argparse
+
 if __name__ == '__main__':
-    runner = ClinicDBSolver(root='/remote-home/iot_zhouqihang/data/medical/CVC-ClinicDB')
+    parser = argparse.ArgumentParser(description='Generate meta.json for CVC-ClinicDB dataset')
+    parser.add_argument('--root', type=str, default='/remote-home/iot_zhouqihang/data/CVC-ClinicDB', help='Root directory of the dataset')
+    args = parser.parse_args()
+    runner = ClinicDBSolver(root=args.root)
     runner.run()

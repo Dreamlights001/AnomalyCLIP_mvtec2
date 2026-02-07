@@ -43,6 +43,11 @@ class IsbiSolver(object):
             f.write(json.dumps(info, indent=4) + "\n")
         print('normal_samples', normal_samples, 'anomaly_samples', anomaly_samples)
 
+import argparse
+
 if __name__ == '__main__':
-    runner = IsbiSolver(root='/remote-home/iot_zhouqihang/data/ISBI')
+    parser = argparse.ArgumentParser(description='Generate meta.json for ISIC2016 dataset')
+    parser.add_argument('--root', type=str, default='/remote-home/iot_zhouqihang/data/isbi', help='Root directory of the dataset')
+    args = parser.parse_args()
+    runner = IsbiSolver(root=args.root)
     runner.run()

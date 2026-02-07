@@ -63,6 +63,11 @@ class DAGMSolver(object):
 
 
 
+import argparse
+
 if __name__ == '__main__':
-    runner = DAGMSolver(root='/remote-home/iot_zhouqihang/data/DAGM_KaggleUpload')
+    parser = argparse.ArgumentParser(description='Generate meta.json for DAGM dataset')
+    parser.add_argument('--root', type=str, default='/remote-home/iot_zhouqihang/data/DAGM', help='Root directory of the dataset')
+    args = parser.parse_args()
+    runner = DAGMSolver(root=args.root)
     runner.run()

@@ -129,6 +129,11 @@ class MVTec2Solver(object):
         with open(self.meta_path, 'w') as f:
             f.write(json.dumps(info, indent=4) + "\n")
         print('normal_samples', normal_samples, 'anomaly_samples', anomaly_samples)
+import argparse
+
 if __name__ == '__main__':
-    runner = MVTec2Solver(root='/root/autodl-tmp/datasets/mvtec2')
+    parser = argparse.ArgumentParser(description='Generate meta.json for MVTec2 dataset')
+    parser.add_argument('--root', type=str, default='/root/autodl-tmp/datasets/mvtec2', help='Root directory of the dataset')
+    args = parser.parse_args()
+    runner = MVTec2Solver(root=args.root)
     runner.run()

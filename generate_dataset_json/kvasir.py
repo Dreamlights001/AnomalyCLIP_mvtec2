@@ -46,6 +46,11 @@ class ClinicDBSolver(object):
 
 
 
+import argparse
+
 if __name__ == '__main__':
-    runner = ClinicDBSolver(root='/remote-home/iot_zhouqihang/data/medical/Kvasir')
+    parser = argparse.ArgumentParser(description='Generate meta.json for Kvasir dataset')
+    parser.add_argument('--root', type=str, default='/remote-home/iot_zhouqihang/data/kvasir', help='Root directory of the dataset')
+    args = parser.parse_args()
+    runner = KvasirSolver(root=args.root)
     runner.run()

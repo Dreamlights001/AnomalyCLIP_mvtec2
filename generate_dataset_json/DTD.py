@@ -38,6 +38,11 @@ class DTDSolver(object):
             f.write(json.dumps(info, indent=4) + "\n")
 
 
+import argparse
+
 if __name__ == '__main__':
-    runner = DTDSolver(root='/remote-home/iot_zhouqihang/data/DTD-Synthetic')
+    parser = argparse.ArgumentParser(description='Generate meta.json for DTD dataset')
+    parser.add_argument('--root', type=str, default='/remote-home/iot_zhouqihang/data/DTD', help='Root directory of the dataset')
+    args = parser.parse_args()
+    runner = DTDSolver(root=args.root)
     runner.run()

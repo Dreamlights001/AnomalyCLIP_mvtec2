@@ -49,6 +49,11 @@ class VisASolver(object):
         print('normal_samples', normal_samples, 'anomaly_samples', anomaly_samples)
 
 
+import argparse
+
 if __name__ == '__main__':
-    runner = VisASolver(root='/remote-home/iot_zhouqihang/data/Visa')
+    parser = argparse.ArgumentParser(description='Generate meta.json for VisA dataset')
+    parser.add_argument('--root', type=str, default='/remote-home/iot_zhouqihang/data/Visa', help='Root directory of the dataset')
+    args = parser.parse_args()
+    runner = VisaSolver(root=args.root)
     runner.run()

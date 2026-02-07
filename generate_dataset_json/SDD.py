@@ -48,6 +48,11 @@ class SDDSolver(object):
         print('normal_samples', normal_samples, 'anomaly_samples', anomaly_samples)
 
 
+import argparse
+
 if __name__ == '__main__':
-    runner = SDDSolver(root='/remote-home/iot_zhouqihang/data/SDD')
+    parser = argparse.ArgumentParser(description='Generate meta.json for SDD dataset')
+    parser.add_argument('--root', type=str, default='/remote-home/iot_zhouqihang/data/SDD', help='Root directory of the dataset')
+    args = parser.parse_args()
+    runner = SDDSolver(root=args.root)
     runner.run()
