@@ -12,30 +12,46 @@ else
     device=-1
 fi
 
-# Train on MVTec2 dataset (focus on MVTec2 first)
-echo "=== Training on MVTec2 dataset ==="
+# Train on VisA dataset (primary training dataset)
+echo "=== Training on VisA dataset ==="
 depth=9
 n_ctx=12
 t_n_ctx=4
-base_dir=${depth}_${n_ctx}_${t_n_ctx}_multiscale_mvtec2
+base_dir=${depth}_${n_ctx}_${t_n_ctx}_multiscale
 save_dir=./checkpoints/${base_dir}/
 
 # 创建保存目录
 mkdir -p ${save_dir}
 
 # 运行训练
-if [ ${device} -ge 0 ]; then
-    # 使用默认 CUDA 设备
-    python train.py --dataset mvtec2 --train_data_path /root/autodl-tmp/datasets/mvtec2 \
-    --save_path ${save_dir} \
-    --features_list 24 --image_size 518  --batch_size 4 --print_freq 1 \
-    --epoch 15 --save_freq 1 --depth ${depth} --n_ctx ${n_ctx} --t_n_ctx ${t_n_ctx}
-else
-    # 使用 CPU
-    python train.py --dataset mvtec2 --train_data_path /root/autodl-tmp/datasets/mvtec2 \
-    --save_path ${save_dir} \
-    --features_list 24 --image_size 518  --batch_size 4 --print_freq 1 \
-    --epoch 15 --save_freq 1 --depth ${depth} --n_ctx ${n_ctx} --t_n_ctx ${t_n_ctx}
-fi
+echo "Starting VisA dataset training..."
+python train.py --dataset visa --train_data_path /root/autodl-tmp/datasets/visa \
+--save_path ${save_dir} \
+--features_list 24 --image_size 518  --batch_size 4 --print_freq 1 \
+--epoch 15 --save_freq 1 --depth ${depth} --n_ctx ${n_ctx} --t_n_ctx ${t_n_ctx}
 
-echo "Training completed!"
+echo "VisA dataset training completed!"
+
+# Train on MVTec dataset
+echo "=== Training on MVTec dataset ==="
+depth=9
+n_ctx=12
+t_n_ctx=4
+base_dir=${depth}_${n_ctx}_${t_n_ctx}_multiscale_visa
+save_dir=./checkpoints/${base_dir}/
+
+# 创建保存目录
+mkdir -p ${save_dir}
+
+# 运行训练
+echo "Starting MVTec dataset training..."
+python train.py --dataset mvtec --train_data_path /root/autodl-tmp/datasets/mvtec \
+--save_path ${save_dir} \
+--features_list 24 --image_size 518  --batch_size 4 --print_freq 1 \
+--epoch 15 --save_freq 1 --depth ${depth} --n_ctx ${n_ctx} --t_n_ctx ${t_n_ctx}
+
+echo "MVTec dataset training completed!"
+
+echo "=== All training completed! ==="
+echo "MVTec2 dataset is only used for testing, not training."
+echo "Use test.sh to evaluate on MVTec2 dataset."
