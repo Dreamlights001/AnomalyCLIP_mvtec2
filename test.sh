@@ -1,58 +1,40 @@
 
+#!/bin/bash
+
 device=0
 
-LOG=${save_dir}"res.log"
-echo ${LOG}
-depth=(9)
-n_ctx=(12)
-t_n_ctx=(4)
-for i in "${!depth[@]}";do
-    for j in "${!n_ctx[@]}";do
-    ## train on the VisA dataset
-        base_dir=${depth[i]}_${n_ctx[j]}_${t_n_ctx[0]}_multiscale
-        save_dir=./checkpoints/${base_dir}/
-        CUDA_VISIBLE_DEVICES=${device} python test.py --dataset mvtec \
-        --data_path /remote-home/iot_zhouqihang/data/mvdataset --save_path ./results/${base_dir}/zero_shot \
-        --checkpoint_path ${save_dir}epoch_15.pth \
-         --features_list 24 --image_size 518 --depth ${depth[i]} --n_ctx ${n_ctx[j]} --t_n_ctx ${t_n_ctx[0]}
-    wait
-    done
-done
+# Test on MVTec dataset
+echo "=== Testing on MVTec dataset ==="
+depth=9
+n_ctx=12
+t_n_ctx=4
+base_dir=${depth}_${n_ctx}_${t_n_ctx}_multiscale
+save_dir=./checkpoints/${base_dir}/
+CUDA_VISIBLE_DEVICES=${device} python test.py --dataset mvtec \
+--data_path /root/autodl-tmp/datasets/mvtec --save_path ./results/${base_dir}/zero_shot \
+--checkpoint_path ${save_dir}epoch_15.pth \
+--features_list 24 --image_size 518 --depth ${depth} --n_ctx ${n_ctx} --t_n_ctx ${t_n_ctx}
 
+# Test on VisA dataset
+echo "=== Testing on VisA dataset ==="
+depth=9
+n_ctx=12
+t_n_ctx=4
+base_dir=${depth}_${n_ctx}_${t_n_ctx}_multiscale_visa
+save_dir=./checkpoints/${base_dir}/
+CUDA_VISIBLE_DEVICES=${device} python test.py --dataset visa \
+--data_path /root/autodl-tmp/datasets/visa --save_path ./results/${base_dir}/zero_shot \
+--checkpoint_path ${save_dir}epoch_15.pth \
+--features_list 24 --image_size 518 --depth ${depth} --n_ctx ${n_ctx} --t_n_ctx ${t_n_ctx}
 
-LOG=${save_dir}"res.log"
-echo ${LOG}
-depth=(9)
-n_ctx=(12)
-t_n_ctx=(4)
-for i in "${!depth[@]}";do
-    for j in "${!n_ctx[@]}";do
-    ## train on the VisA dataset
-        base_dir=${depth[i]}_${n_ctx[j]}_${t_n_ctx[0]}_multiscale_visa
-        save_dir=./checkpoints/${base_dir}/
-        CUDA_VISIBLE_DEVICES=${device} python test.py --dataset visa \
-        --data_path /remote-home/iot_zhouqihang/data/Visa --save_path ./results/${base_dir}/zero_shot \
-        --checkpoint_path ${save_dir}epoch_15.pth \
-        --features_list 24 --image_size 518 --depth ${depth[i]} --n_ctx ${n_ctx[j]} --t_n_ctx ${t_n_ctx[0]}
-    wait
-    done
-done
-
-
-LOG=${save_dir}"res.log"
-echo ${LOG}
-depth=(9)
-n_ctx=(12)
-t_n_ctx=(4)
-for i in "${!depth[@]}";do
-    for j in "${!n_ctx[@]}";do
-    ## train on the VisA dataset
-        base_dir=${depth[i]}_${n_ctx[j]}_${t_n_ctx[0]}_multiscale
-        save_dir=./checkpoints/${base_dir}/
-        CUDA_VISIBLE_DEVICES=${device} python test.py --dataset mvtec2 \
-        --data_path /root/autodl-tmp/datasets/mvtec2 --save_path ./results/${base_dir}/zero_shot_mvtec2 \
-        --checkpoint_path ${save_dir}epoch_15.pth \
-         --features_list 24 --image_size 518 --depth ${depth[i]} --n_ctx ${n_ctx[j]} --t_n_ctx ${t_n_ctx[0]}
-    wait
-    done
-done
+# Test on MVTec2 dataset
+echo "=== Testing on MVTec2 dataset ==="
+depth=9
+n_ctx=12
+t_n_ctx=4
+base_dir=${depth}_${n_ctx}_${t_n_ctx}_multiscale
+save_dir=./checkpoints/${base_dir}/
+CUDA_VISIBLE_DEVICES=${device} python test.py --dataset mvtec2 \
+--data_path /root/autodl-tmp/datasets/mvtec2 --save_path ./results/${base_dir}/zero_shot_mvtec2 \
+--checkpoint_path ${save_dir}epoch_15.pth \
+--features_list 24 --image_size 518 --depth ${depth} --n_ctx ${n_ctx} --t_n_ctx ${t_n_ctx}
