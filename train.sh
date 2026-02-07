@@ -6,11 +6,10 @@ if command -v nvidia-smi &> /dev/null && nvidia-smi | grep -q "CUDA Version";
  then
     echo "CUDA GPU detected, using GPU for training"
     device=0
-    use_cuda="CUDA_VISIBLE_DEVICES=${device}"
+    echo "Using CUDA device ${device}"
 else
     echo "No CUDA GPU detected, using CPU for training"
     device=-1
-    use_cuda=""
 fi
 
 # Train on MVTec2 dataset (focus on MVTec2 first)
@@ -25,9 +24,18 @@ save_dir=./checkpoints/${base_dir}/
 mkdir -p ${save_dir}
 
 # 运行训练
-${use_cuda} python train.py --dataset mvtec2 --train_data_path /root/autodl-tmp/datasets/mvtec2 \
---save_path ${save_dir} \
---features_list 24 --image_size 518  --batch_size 4 --print_freq 1 \
---epoch 15 --save_freq 1 --depth ${depth} --n_ctx ${n_ctx} --t_n_ctx ${t_n_ctx}
+if [ ${device} -ge 0 ]; then
+    # 使用默认 CUDA 设备
+    python train.py --dataset mvtec2 --train_data_path /root/autodl-tmp/datasets/mvtec2 \
+    --save_path ${save_dir} \
+    --features_list 24 --image_size 518  --batch_size 4 --print_freq 1 \
+    --epoch 15 --save_freq 1 --depth ${depth} --n_ctx ${n_ctx} --t_n_ctx ${t_n_ctx}
+else
+    # 使用 CPU
+    python train.py --dataset mvtec2 --train_data_path /root/autodl-tmp/datasets/mvtec2 \
+    --save_path ${save_dir} \
+    --features_list 24 --image_size 518  --batch_size 4 --print_freq 1 \
+    --epoch 15 --save_freq 1 --depth ${depth} --n_ctx ${n_ctx} --t_n_ctx ${t_n_ctx}
+fi
 
 echo "Training completed!"
