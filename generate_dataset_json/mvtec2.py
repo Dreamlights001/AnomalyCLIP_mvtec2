@@ -68,19 +68,49 @@ class MVTec2Solver(object):
             validation_cls_info = []
             validation_dir = f'{cls_dir}/validation'
             if os.path.exists(validation_dir):
-                img_names = os.listdir(validation_dir)
-                img_names.sort()
-                for img_name in img_names:
-                    metadata = self.extract_metadata(img_name)
-                    info_img = dict(
-                        img_path=f'{cls_name}/validation/{img_name}',
-                        mask_path='',
-                        cls_name=cls_name,
-                        specie_name='validation',
-                        anomaly=0,
-                        **metadata
-                    )
-                    validation_cls_info.append(info_img)
+                # Check if validation directory has subdirectories
+                items = os.listdir(validation_dir)
+                for item in items:
+                    item_path = f'{validation_dir}/{item}'
+                    if os.path.isdir(item_path):
+                        # This is a subdirectory (e.g., 'good')
+                        specie = item
+                        is_abnormal = True if specie not in ['good'] else False
+                        try:
+                            img_names = os.listdir(item_path)
+                            img_names.sort()
+                            for img_name in img_names:
+                                # Skip non-image files
+                                if not img_name.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.tiff')):
+                                    continue
+                                metadata = self.extract_metadata(img_name)
+                                info_img = dict(
+                                    img_path=f'{cls_name}/validation/{specie}/{img_name}',
+                                    mask_path='',
+                                    cls_name=cls_name,
+                                    specie_name=specie,
+                                    anomaly=1 if is_abnormal else 0,
+                                    **metadata
+                                )
+                                validation_cls_info.append(info_img)
+                        except Exception as e:
+                            print(f"Error processing validation subdirectory {item}: {e}")
+                            continue
+                    else:
+                        # This is a file directly in validation directory
+                        # Skip non-image files
+                        if not item.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.tiff')):
+                            continue
+                        metadata = self.extract_metadata(item)
+                        info_img = dict(
+                            img_path=f'{cls_name}/validation/{item}',
+                            mask_path='',
+                            cls_name=cls_name,
+                            specie_name='validation',
+                            anomaly=0,
+                            **metadata
+                        )
+                        validation_cls_info.append(info_img)
             info['validation'][cls_name] = validation_cls_info
             
             # Process test data
