@@ -78,25 +78,29 @@ class Dataset(data.Dataset):
         
         # 打开图像文件
         img = Image.open(full_img_path)
-        if anomaly == 0:
-            img_mask = Image.fromarray(np.zeros((img.size[0], img.size[1])), mode='L')
-        else:
-            try:
+        # 确保创建一个有效的掩码
+        try:
+            if anomaly == 0:
+                img_mask = Image.fromarray(np.zeros((img.size[0], img.size[1])), mode='L')
+            else:
                 mask_full_path = os.path.join(self.root, mask_path)
-                if not os.path.isfile(mask_full_path):
-                    # 如果 mask_path 不是文件（可能是目录或不存在），使用空掩码
-                    img_mask = Image.fromarray(np.zeros((img.size[0], img.size[1])), mode='L')
-                else:
+                if os.path.isfile(mask_full_path):
                     # 正常加载掩码文件
                     img_mask = np.array(Image.open(mask_full_path).convert('L')) > 0
                     img_mask = Image.fromarray(img_mask.astype(np.uint8) * 255, mode='L')
-            except Exception as e:
-                # 任何异常情况下都使用空掩码
-                img_mask = Image.fromarray(np.zeros((img.size[0], img.size[1])), mode='L')
+                else:
+                    # 如果没有掩码文件，使用空掩码
+                    img_mask = Image.fromarray(np.zeros((img.size[0], img.size[1])), mode='L')
+        except Exception as e:
+            # 任何异常情况下都使用空掩码
+            img_mask = Image.fromarray(np.zeros((img.size[0], img.size[1])), mode='L')
         # transforms
         img = self.transform(img) if self.transform is not None else img
-        img_mask = self.target_transform(   
+        img_mask = self.target_transform(
             img_mask) if self.target_transform is not None and img_mask is not None else img_mask
-        img_mask = [] if img_mask is None else img_mask
+        # 确保返回的是有效的掩码，而不是空列表
+        if img_mask is None:
+            # 如果没有掩码，返回一个全零的掩码
+            img_mask = torch.zeros((1, 518, 518))
         return {'img': img, 'img_mask': img_mask, 'cls_name': cls_name, 'anomaly': anomaly,
                 'img_path': os.path.join(self.root, img_path), "cls_id": self.class_name_map_class_id[cls_name]}    
