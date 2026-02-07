@@ -35,7 +35,8 @@ def _download(
 
     if not cache_dir:
         # cache_dir = os.path.expanduser("~/.cache/clip")
-        cache_dir = os.path.expanduser("/remote-home/iot_zhouqihang/root/.cache/clip")
+        # cache_dir = os.path.expanduser("/remote-home/iot_zhouqihang/root/.cache/clip")
+        cache_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "checkpoints")
     os.makedirs(cache_dir, exist_ok=True)
     filename = os.path.basename(url)
 
@@ -142,7 +143,9 @@ def load(name: str, device: Union[str, torch.device] = "cuda" if torch.cuda.is_a
     print("name", name)
     if name in _MODELS:
         # model_path = _download(_MODELS[name], download_root or os.path.expanduser("~/.cache/clip"))
-        model_path = _download(_MODELS[name], download_root or os.path.expanduser("/remote-home/iot_zhouqihang/root/.cache/clip"))
+        # model_path = _download(_MODELS[name], download_root or os.path.expanduser("/remote-home/iot_zhouqihang/root/.cache/clip"))
+        default_download_root = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "checkpoints")
+        model_path = _download(_MODELS[name], download_root or default_download_root)
     elif os.path.isfile(name):
         model_path = name
     else:
