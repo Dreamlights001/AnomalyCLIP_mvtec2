@@ -81,7 +81,8 @@ def train(args):
             # Apply DPAM surgery
             text_probs = image_features.unsqueeze(1) @ text_features.permute(0, 2, 1)
             text_probs = text_probs[:, 0, ...]/0.07
-            image_loss = F.cross_entropy(text_probs.squeeze(), label.long().cuda())
+            # 计算损失
+            image_loss = F.cross_entropy(text_probs.squeeze(), label.long().to(device))
             image_loss_list.append(image_loss.item())
             #########################################################################
             similarity_map_list = []
