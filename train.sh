@@ -23,11 +23,11 @@ save_dir=./checkpoints/${base_dir}/
 # 创建保存目录
 mkdir -p ${save_dir}
 
-# 运行训练 - 增加 batch size 以充分利用 24G 显存
-echo "Starting VisA dataset training with larger batch size..."
+# 运行训练 - 进一步增加 batch size 以充分利用 24G 显存
+echo "Starting VisA dataset training with maximum batch size..."
 python train.py --dataset visa --train_data_path /root/autodl-tmp/datasets/visa \
 --save_path ${save_dir} \
---features_list 24 --image_size 518  --batch_size 16 --print_freq 1 \
+--features_list 24 --image_size 518  --batch_size 32 --print_freq 1 \
 --epoch 15 --save_freq 1 --depth ${depth} --n_ctx ${n_ctx} --t_n_ctx ${t_n_ctx}
 
 echo "VisA dataset training completed!"
@@ -43,11 +43,11 @@ save_dir=./checkpoints/${base_dir}/
 # 创建保存目录
 mkdir -p ${save_dir}
 
-# 运行训练 - 增加 batch size 以充分利用 24G 显存
-echo "Starting MVTec dataset training with larger batch size..."
+# 运行训练 - 进一步增加 batch size 以充分利用 24G 显存
+echo "Starting MVTec dataset training with maximum batch size..."
 python train.py --dataset mvtec --train_data_path /root/autodl-tmp/datasets/mvtec \
 --save_path ${save_dir} \
---features_list 24 --image_size 518  --batch_size 16 --print_freq 1 \
+--features_list 24 --image_size 518  --batch_size 32 --print_freq 1 \
 --epoch 15 --save_freq 1 --depth ${depth} --n_ctx ${n_ctx} --t_n_ctx ${t_n_ctx}
 
 echo "MVTec dataset training completed!"
