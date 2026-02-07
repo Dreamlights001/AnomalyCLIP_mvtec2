@@ -137,16 +137,22 @@ class MVTec2Solver(object):
                 
                 # Process bad samples
                 bad_dir = f'{test_public_dir}/bad'
-                ground_truth_dir = f'{test_public_dir}/ground_truth'
-                if os.path.exists(bad_dir) and os.path.exists(ground_truth_dir):
+                if os.path.exists(bad_dir):
                     img_names = os.listdir(bad_dir)
                     img_names.sort()
                     for img_name in img_names:
-                        mask_name = self.get_mask_path(img_name, ground_truth_dir)
+                        # 即使没有 ground_truth 目录，也添加异常样本
+                        mask_path = ''
+                        ground_truth_dir = f'{test_public_dir}/ground_truth'
+                        if os.path.exists(ground_truth_dir):
+                            mask_name = self.get_mask_path(img_name, ground_truth_dir)
+                            if mask_name:
+                                mask_path = f'{cls_name}/test_public/ground_truth/{mask_name}'
+                        
                         metadata = self.extract_metadata(img_name)
                         info_img = dict(
                             img_path=f'{cls_name}/test_public/bad/{img_name}',
-                            mask_path=f'{cls_name}/test_public/ground_truth/{mask_name}' if mask_name else '',
+                            mask_path=mask_path,
                             cls_name=cls_name,
                             specie_name='bad',
                             anomaly=1,
@@ -154,6 +160,10 @@ class MVTec2Solver(object):
                         )
                         test_cls_info.append(info_img)
                         anomaly_samples += 1
+                        print(f"Added anomaly sample: {img_name} for category {cls_name}")
+            
+            # 打印统计信息
+            print(f"Category {cls_name}: test samples = {len(test_cls_info)}, normal = {normal_samples}, anomaly = {anomaly_samples}")
             info['test'][cls_name] = test_cls_info
         with open(self.meta_path, 'w') as f:
             f.write(json.dumps(info, indent=4) + "\n")
