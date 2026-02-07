@@ -55,5 +55,5 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generate meta.json for VisA dataset')
     parser.add_argument('--root', type=str, default='/remote-home/iot_zhouqihang/data/Visa', help='Root directory of the dataset')
     args = parser.parse_args()
-    runner = VisaSolver(root=args.root)
+    runner = VisASolver(root=args.root)
     runner.run()

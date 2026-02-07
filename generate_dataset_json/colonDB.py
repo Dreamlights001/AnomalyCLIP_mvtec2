@@ -51,5 +51,5 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generate meta.json for CVC-ColonDB dataset')
     parser.add_argument('--root', type=str, default='/remote-home/iot_zhouqihang/data/CVC-ColonDB', help='Root directory of the dataset')
     args = parser.parse_args()
-    runner = ColonDBSolver(root=args.root)
+    runner = ClinicDBSolver(root=args.root)
     runner.run()

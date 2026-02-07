@@ -39,5 +39,5 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generate meta.json for BrainMRI dataset')
     parser.add_argument('--root', type=str, default='/remote-home/iot_zhouqihang/data/brainmri', help='Root directory of the dataset')
     args = parser.parse_args()
-    runner = BrainMRISolver(root=args.root)
+    runner = IsbiSolver(root=args.root)
     runner.run()

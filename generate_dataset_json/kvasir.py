@@ -3,7 +3,7 @@ import json
 import pandas as pd
 
 
-class ClinicDBSolver(object):
+class KvasirSolver(object):
     CLSNAMES = [
         'colon',
     ]

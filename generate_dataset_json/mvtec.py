@@ -29,9 +29,12 @@ class MVTecSolver(object):
                     img_names.sort()
                     mask_names.sort() if mask_names is not None else None
                     for idx, img_name in enumerate(img_names):
+                        mask_path = ''
+                        if is_abnormal and mask_names and idx < len(mask_names):
+                            mask_path = f'{cls_name}/ground_truth/{specie}/{mask_names[idx]}'
                         info_img = dict(
                             img_path=f'{cls_name}/{phase}/{specie}/{img_name}',
-                            mask_path=f'{cls_name}/ground_truth/{specie}/{mask_names[idx]}' if is_abnormal else '',
+                            mask_path=mask_path,
                             cls_name=cls_name,
                             specie_name=specie,
                             anomaly=1 if is_abnormal else 0,
