@@ -143,18 +143,17 @@ class MVTec2Solver(object):
                     img_names.sort()
                     for img_name in img_names:
                         mask_name = self.get_mask_path(img_name, ground_truth_dir)
-                        if mask_name:
-                            metadata = self.extract_metadata(img_name)
-                            info_img = dict(
-                                img_path=f'{cls_name}/test_public/bad/{img_name}',
-                                mask_path=f'{cls_name}/test_public/ground_truth/{mask_name}',
-                                cls_name=cls_name,
-                                specie_name='bad',
-                                anomaly=1,
-                                **metadata
-                            )
-                            test_cls_info.append(info_img)
-                            anomaly_samples += 1
+                        metadata = self.extract_metadata(img_name)
+                        info_img = dict(
+                            img_path=f'{cls_name}/test_public/bad/{img_name}',
+                            mask_path=f'{cls_name}/test_public/ground_truth/{mask_name}' if mask_name else '',
+                            cls_name=cls_name,
+                            specie_name='bad',
+                            anomaly=1,
+                            **metadata
+                        )
+                        test_cls_info.append(info_img)
+                        anomaly_samples += 1
             info['test'][cls_name] = test_cls_info
         with open(self.meta_path, 'w') as f:
             f.write(json.dumps(info, indent=4) + "\n")

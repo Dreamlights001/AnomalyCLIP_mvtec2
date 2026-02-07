@@ -34,7 +34,9 @@ n_ctx=12
 t_n_ctx=4
 base_dir=${depth}_${n_ctx}_${t_n_ctx}_multiscale
 save_dir=./checkpoints/${base_dir}/
+echo "Using checkpoint: ${save_dir}epoch_15.pth"
+echo "Testing MVTec2 dataset with VisA-trained model..."
 CUDA_VISIBLE_DEVICES=${device} python test.py --dataset mvtec2 \
 --data_path /root/autodl-tmp/datasets/mvtec2 --save_path ./results/${base_dir}/zero_shot_mvtec2 \
 --checkpoint_path ${save_dir}epoch_15.pth \
---features_list 24 --image_size 518 --depth ${depth} --n_ctx ${n_ctx} --t_n_ctx ${t_n_ctx}
+--features_list 6 12 18 24 --image_size 518 --depth ${depth} --n_ctx ${n_ctx} --t_n_ctx ${t_n_ctx} --metrics image-pixel-level
