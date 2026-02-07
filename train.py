@@ -133,7 +133,7 @@ if __name__ == '__main__':
     parser.add_argument("--image_size", type=int, default=518, help="image size")
     parser.add_argument("--print_freq", type=int, default=1, help="print frequency")
     parser.add_argument("--save_freq", type=int, default=1, help="save frequency")
-    parser.add_argument("--seed", type=int, default=111, help="random seed")
+    parser.add_argument("--seed", type=int, default=42, help="random seed")
     args = parser.parse_args()
     setup_seed(args.seed)
     train(args)

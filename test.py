@@ -188,7 +188,7 @@ if __name__ == '__main__':
     parser.add_argument("--t_n_ctx", type=int, default=4, help="zero shot")
     parser.add_argument("--feature_map_layer", type=int,  nargs="+", default=[0, 1, 2, 3], help="zero shot")
     parser.add_argument("--metrics", type=str, default='image-pixel-level')
-    parser.add_argument("--seed", type=int, default=111, help="random seed")
+    parser.add_argument("--seed", type=int, default=42, help="random seed")
     parser.add_argument("--sigma", type=int, default=4, help="zero shot")
     
     args = parser.parse_args()
