@@ -33,10 +33,26 @@ class MVTec2Solver(object):
         """Find corresponding mask file for an image"""
         # Try to find mask with matching name pattern
         base_name = os.path.splitext(img_name)[0]
+        
+        # 尝试多种匹配策略
         for mask_name in os.listdir(ground_truth_dir):
-            if base_name in mask_name or 'mask' in mask_name:
+            # 策略1: 完全匹配基名
+            if os.path.splitext(mask_name)[0] == base_name:
                 return mask_name
-        # Fallback: return None if no match found
+            # 策略2: 基名在掩码文件名中
+            if base_name in mask_name:
+                return mask_name
+            # 策略3: 掩码文件名在基名中
+            if os.path.splitext(mask_name)[0] in base_name:
+                return mask_name
+            # 策略4: 包含mask关键词
+            if 'mask' in mask_name:
+                return mask_name
+        # Fallback: 返回第一个掩码文件（如果有）
+        mask_files = os.listdir(ground_truth_dir)
+        if mask_files:
+            return mask_files[0]
+        # 最终 fallback: 返回None
         return None
 
     def run(self):
